@@ -1,6 +1,7 @@
 name: psp_medprep
-description: PSP MedPrep - MDCAT Preparation App
-publish_to: "none"
+description: PSP‑MedPrep Android App
+publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:
@@ -9,26 +10,28 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8
-  shared_preferences: ^2.2.2
-  flutter_pdfview: ^1.3.2
-  pdf_text: ^0.5.1
-  google_fonts: ^6.2.1
+
+  # PDF rendering
+  pdfx: ^2.9.2
+
+  # State management
+  provider: ^7.0.0
+
+  # HTTP requests
+  http: ^1.0.0
+
+  # Launch URLs (web, email, etc)
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
-  assets:
-    - assets/notes/
-    - assets/papers/
-    - assets/mock_tests/
-    - assets/images/
 
-flutter_launcher_icons:
-  android: "launcher_icon"
-  image_path: "assets/images/logo.png"
-  min_sdk_android: 21
+  assets:
+    - assets/papers/
+    - assets/notes/
+    - assets/mock_tests/
