@@ -17,7 +17,7 @@ dependencies:
 
   # PDF viewing & text extraction
   pdfx: ^2.6.0
-  pdf_text: ^0.5.1
+  pdf_text: ^0.4.0 
 
   # HTTP requests
   http: ^1.1.1
