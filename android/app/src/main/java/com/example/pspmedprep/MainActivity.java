@@ -1,6 +1,6 @@
-package com.example.pspmedprep;
+package com.yourcompany.psp_medprep
 
-import io.flutter.embedding.android.FlutterActivity;
+import io.flutter.embedding.android.FlutterActivity
 
-public class MainActivity extends FlutterActivity {
+class MainActivity: FlutterActivity() {
 }
