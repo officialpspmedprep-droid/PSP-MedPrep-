@@ -1,53 +1,34 @@
 name: psp_medprep
-description: PSP‑MedPrep Android App
-publish_to: 'none'
-
+description: PSP MedPrep Android app
 version: 1.0.0+1
+publish_to: 'none' # Do not publish to pub.dev
 
 environment:
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=2.18.0 <3.0.0"
+  flutter: ">=3.24.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  # PDF handling
-  pdfx: ^2.9.2
+  # UI & Flutter essentials
+  cupertino_icons: ^1.0.5
+  provider: ^6.0.5
 
-  # State management
-  provider: ^7.0.0
+  # PDF viewing & text extraction
+  pdfx: ^2.6.0
+  pdf_text: ^0.5.1
 
   # HTTP requests
-  http: ^1.0.0
-
-  # Launch URLs
-  url_launcher: ^6.3.2
-
-  # Show toast messages
-  fluttertoast: ^9.0.0
-
-  # Screen size adaptation
-  flutter_screenutil: ^5.9.3
-
-  # Network connectivity check
-  connectivity_plus: ^4.0.0
-
-  # Share content via Android share menu
-  share_plus: ^6.0.0
-
-  # Local notifications
-  flutter_local_notifications: ^19.5.0
+  http: ^1.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
-  mockito: ^5.5.1
+  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/papers/
-    - assets/notes/
-    - assets/mock_tests/
+    - assets/images/logo.png
