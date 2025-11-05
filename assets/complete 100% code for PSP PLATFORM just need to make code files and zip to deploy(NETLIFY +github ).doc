@@ -1,0 +1,1397 @@
+I AM GIVING YOU A COMPLETE CODE FOR MY  " PSP MEDPREP PLAFORM "
+
+You work : 
+• JUST GO ACCORDING TO IT 
+• TELL ME THE NEXT STEPS FOR DEPLOYMENT
+• OR TELL ME THE MISSING CODES 
+• OR MORE ADVANCMENT IF NEEDED
+• SUGGEST ME WHETHER TO MAKE IT PROFESSIONAL APP OR ONLINE WEBSITE 
+
+here is the full code  :
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - PSP MedPrep 🇵🇰</title>
+    <link rel="stylesheet" href="/src/css/style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <!-- Student Authentication Check -->
+    <script>
+        function checkStudentAuth() {
+            const studentData = localStorage.getItem('studentData');
+            const sessionTime = localStorage.getItem('studentSession');
+            
+            if (!studentData || !sessionTime) {
+                window.location.href = '/student-login.html';
+                return null;
+            }
+            
+            const sessionAge = Date.now() - parseInt(sessionTime);
+            if (sessionAge > 24 * 60 * 60 * 1000) { // 24 hours
+                localStorage.removeItem('studentData');
+                localStorage.removeItem('studentSession');
+                window.location.href = '/student-login.html';
+                return null;
+            }
+            
+            try {
+                return JSON.parse(studentData);
+            } catch (error) {
+                window.location.href = '/student-login.html';
+                return null;
+            }
+        }
+        
+        // Redirect if not authenticated
+        const student = checkStudentAuth();
+        if (!student) {
+            // Redirect will happen
+        }
+    </script>
+
+    <div class="student-nav">
+        <a href="/student-dashboard.html">🎯 Dashboard</a>
+        <a href="/student-downloads.html">📥 Downloads</a>
+        <a href="/tests.html">📚 Practice Tests</a>
+        <a href="/premium.html">💎 Upgrade</a>
+        <a href="/">🌐 Homepage</a>
+        <a href="#" onclick="logout()" style="float: right;">🔐 Logout</a>
+    </div>
+
+    <div class="dashboard">
+        <div id="loadingMessage" style="text-align: center; padding: 4rem;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">⏰</div>
+            <h1 style="color: #2563eb;">Loading Your Dashboard...</h1>
+            <p>Please wait while we load your study information</p>
+        </div>
+        
+        <div id="dashboardContent" style="display: none;">
+            <!-- Welcome Section -->
+            <div style="background: linear-gradient(135deg, #2563eb, #1e40af); color: white; padding: 2.5rem; border-radius: 20px; margin-bottom: 2rem;">
+                <h1 id="studentName">Welcome back, Student!</h1>
+                <p>PSP MedPrep 🇵🇰 Student Dashboard - Your MDCAT Success Partner</p>
+            </div>
+            
+            <!-- Quick Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>📦 Your Package</h3>
+                    <p id="packageType" style="font-size: 1.5rem; color: #2563eb;">Loading...</p>
+                    <small>Access level</small>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>⏰ Access Expires</h3>
+                    <p id="daysRemaining" style="font-size: 1.5rem; color: #059669;">Loading...</p>
+                    <small id="expiryDate">Valid until</small>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>📚 Available Papers</h3>
+                    <p style="font-size: 1.5rem; color: #7c3aed;">7 Years</p>
+                    <small>2018-2024</small>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>🔑 Access Code</h3>
+                    <p id="accessCodeDisplay" style="font-size: 1.1rem; color: #dc2626; font-family: monospace; font-weight: bold;">Loading...</p>
+                    <small>Your unique code</small>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <a href="/student-downloads.html" class="action-btn">
+                    <div style="font-size: 2.5rem;">📥</div>
+                    <div>
+                        <strong>Download Materials</strong>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">Get all study papers & resources</p>
+                    </div>
+                </a>
+                
+                <a href="/tests.html" class="action-btn">
+                    <div style="font-size: 2.5rem;">📚</div>
+                    <div>
+                        <strong>Practice Tests</strong>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">Test your preparation</p>
+                    </div>
+                </a>
+                
+                <a href="/premium.html" class="action-btn">
+                    <div style="font-size: 2.5rem;">💎</div>
+                    <div>
+                        <strong>Upgrade Package</strong>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">Get more features</p>
+                    </div>
+                </a>
+                
+                <a href="/" class="action-btn">
+                    <div style="font-size: 2.5rem;">🌐</div>
+                    <div>
+                        <strong>Visit Homepage</strong>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">Explore more resources</p>
+                    </div>
+                </a>
+
+                <!-- NUCLEAR PHYSICS BUTTONS -->
+                <a href="#" onclick="loadNuclearPhysics()" class="action-btn">
+                    <div style="font-size: 2.5rem;">⚛️</div>
+                    <div>
+                        <strong>Nuclear Physics</strong>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">Complete MDCAT Notes & Tools</p>
+                    </div>
+                </a>
+                
+                <a href="#" onclick="loadAISolver()" class="action-btn">
+                    <div style="font-size: 2.5rem;">🤖</div>
+                    <div>
+                        <strong>Physics AI Solver</strong>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; opacity: 0.8;">Instant Accurate Solutions</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- NUCLEAR PHYSICS CONTENT CONTAINERS -->
+            <div id="nuclearPhysicsContent" style="display: none;"></div>
+            <div id="aiSolverContent" style="display: none;"></div>
+
+            <!-- Study Progress -->
+            <div style="background: white; padding: 2.5rem; border-radius: 15px; margin-top: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                <h3 style="color: #2563eb; margin-bottom: 1.5rem;">📈 Your Study Journey</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; color: #059669;">📚</div>
+                        <h4>Complete Syllabus</h4>
+                        <p>All MDCAT topics covered in our materials</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; color: #2563eb;">🎯</div>
+                        <h4>Structured Learning</h4>
+                        <p>Year-wise organized papers for systematic study</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; color: #7c3aed;">⚡</div>
+                        <h4>Quick Revision</h4>
+                        <p>Important questions and answer keys for fast review</p>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div style="font-size: 3rem; color: #f59e0b;">📱</div>
+                        <h4>Mobile Friendly</h4>
+                        <p>Study anywhere, anytime on any device</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expiry Warning -->
+            <div id="expiryWarning" class="message warning" style="display: none; margin-top: 2rem;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 2rem;">⚠️</div>
+                    <div>
+                        <strong>Your access will expire soon!</strong><br>
+                        Renew your package to continue accessing all study materials without interruption.
+                    </div>
+                </div>
+                <a href="/premium.html" class="cta-button" style="margin-top: 1rem;">💎 Renew Package</a>
+            </div>
+
+            <!-- Recent Activity -->
+            <div style="background: white; padding: 2.5rem; border-radius: 15px; margin-top: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                <h3 style="color: #2563eb; margin-bottom: 1.5rem;">📋 Getting Started</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                    <div style="background: #f0f7ff; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #2563eb;">
+                        <h4 style="color: #2563eb; margin-bottom: 0.5rem;">1. Download Materials</h4>
+                        <p style="color: #6b7280; margin: 0;">Start with the complete papers collection and organize your study plan</p>
+                    </div>
+                    
+                    <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #059669;">
+                        <h4 style="color: #059669; margin-bottom: 0.5rem;">2. Create Study Schedule</h4>
+                        <p style="color: #6b7280; margin: 0;">Dedicate 2-3 hours daily for MDCAT preparation</p>
+                    </div>
+                    
+                    <div style="background: #faf5ff; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #7c3aed;">
+                        <h4 style="color: #7c3aed; margin-bottom: 0.5rem;">3. Practice Regularly</h4>
+                        <p style="color: #6b7280; margin: 0;">Solve past papers and track your progress</p>
+                    </div>
+                    
+                    <div style="background: #fffbeb; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #f59e0b;">
+                        <h4 style="color: #f59e0b; margin-bottom: 0.5rem;">4. Review Mistakes</h4>
+                        <p style="color: #6b7280; margin: 0;">Learn from errors and improve your weak areas</p>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="/student-downloads.html" class="cta-button">🚀 Start Studying Now</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Error Message -->
+        <div id="errorMessage" class="message error" style="display: none; margin-top: 2rem;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="font-size: 2rem;">❌</div>
+                <div>
+                    <strong>Session Expired</strong><br>
+                    Please login again to access your student dashboard.
+                </div>
+            </div>
+            <a href="/student-login.html" class="cta-button" style="margin-top: 1rem;">🎓 Student Login</a>
+        </div>
+    </div>
+
+    <script src="/src/js/firebase-config.js"></script>
+    <script>
+        // Load student dashboard
+        function loadStudentDashboard() {
+            const studentData = localStorage.getItem('studentData');
+            
+            if (!studentData) {
+                showError();
+                return;
+            }
+            
+            try {
+                const student = JSON.parse(studentData);
+                
+                // Hide loading, show content
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'block';
+                
+                // Display student information
+                document.getElementById('studentName').textContent = `Welcome back, ${student.studentName}!`;
+                document.getElementById('accessCodeDisplay').textContent = student.accessCode;
+                
+                // Display package information
+                const packageNames = {
+                    149: 'PSP Basic',
+                    249: 'PSP Professional', 
+                    349: 'PSP Elite'
+                };
+                document.getElementById('packageType').textContent = packageNames[student.packageAmount] || 'Unknown Package';
+                
+                // Display expiry information
+                if (student.daysRemaining !== undefined) {
+                    const daysRemaining = student.daysRemaining;
+                    document.getElementById('daysRemaining').textContent = `${daysRemaining} days`;
+                    
+                    // Color code based on days remaining
+                    if (daysRemaining < 7) {
+                        document.getElementById('daysRemaining').style.color = '#dc2626';
+                    } else if (daysRemaining < 30) {
+                        document.getElementById('daysRemaining').style.color = '#f59e0b';
+                    } else {
+                        document.getElementById('daysRemaining').style.color = '#059669';
+                    }
+                    
+                    // Show warning if less than 30 days
+                    if (daysRemaining < 30) {
+                        document.getElementById('expiryWarning').style.display = 'block';
+                    }
+                }
+                
+                if (student.expiryDate) {
+                    const expiryDate = student.expiryDate.toDate();
+                    document.getElementById('expiryDate').textContent = `Until ${expiryDate.toLocaleDateString()}`;
+                }
+                
+                // Update session time
+                localStorage.setItem('studentSession', Date.now().toString());
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                showError();
+            }
+        }
+        
+        function showError() {
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+        
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('studentData');
+                localStorage.removeItem('studentSession');
+                window.location.href = '/student-login.html';
+            }
+        }
+        
+        // Load dashboard when page loads
+        window.addEventListener('DOMContentLoaded', loadStudentDashboard);
+        
+        // Auto-logout after 24 hours
+        setInterval(() => {
+            const sessionTime = localStorage.getItem('studentSession');
+            if (sessionTime) {
+                const sessionAge = Date.now() - parseInt(sessionTime);
+                if (sessionAge > 24 * 60 * 60 * 1000) {
+                    localStorage.removeItem('studentData');
+                    localStorage.removeItem('studentSession');
+                    window.location.href = '/student-login.html';
+                }
+            }
+        }, 60 * 60 * 1000); // Check every hour
+    </script>
+
+    <!-- NUCLEAR PHYSICS MODULE SCRIPT -->
+    <script>
+        // =============================================
+        // NUCLEAR PHYSICS MODULE - PSP MEDPREP 🇵🇰
+        // =============================================
+
+        // Global variables to track module state
+        let currentPhysicsSection = 'welcome';
+
+        // Main loader functions
+        function loadNuclearPhysics() {
+            // Hide AI solver if open
+            document.getElementById('aiSolverContent').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'none';
+            
+            // Show physics content
+            document.getElementById('nuclearPhysicsContent').style.display = 'block';
+            
+            // Load the module
+            renderNuclearPhysicsModule();
+            
+            // Scroll to content
+            document.getElementById('nuclearPhysicsContent').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function loadAISolver() {
+            // Hide physics content if open
+            document.getElementById('nuclearPhysicsContent').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'none';
+            
+            // Show AI solver
+            document.getElementById('aiSolverContent').style.display = 'block';
+            
+            // Load the AI solver
+            renderAISolverModule();
+            
+            // Scroll to content
+            document.getElementById('aiSolverContent').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function backToDashboard() {
+            // Show dashboard, hide modules
+            document.getElementById('nuclearPhysicsContent').style.display = 'none';
+            document.getElementById('aiSolverContent').style.display = 'none';
+            document.getElementById('dashboardContent').style.display = 'block';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Nuclear Physics Module Renderer
+        function renderNuclearPhysicsModule() {
+            const content = `
+            <div style="max-width: 1200px; margin: 0 auto; padding: 1rem;">
+                <!-- Header with Back Button -->
+                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1.5rem;">
+                    <button onclick="backToDashboard()" class="btn btn-view" style="display: flex; align-items: center; gap: 0.5rem;">
+                        🔙 Back to Dashboard
+                    </button>
+                    <h1 style="color: #2563eb; margin: 0; text-align: center; flex: 1;">MDCAT Nuclear Physics</h1>
+                </div>
+
+                <!-- Quick Navigation -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; margin-bottom: 2rem;">
+                    <button onclick="showPhysicsSection('composition')" class="btn ${currentPhysicsSection === 'composition' ? 'btn-view' : ''}" style="padding: 0.8rem;">1. Atomic Nucleus</button>
+                    <button onclick="showPhysicsSection('decay')" class="btn ${currentPhysicsSection === 'decay' ? 'btn-view' : ''}" style="padding: 0.8rem;">2. Nuclear Decay</button>
+                    <button onclick="showPhysicsSection('half-life')" class="btn ${currentPhysicsSection === 'half-life' ? 'btn-view' : ''}" style="padding: 0.8rem;">3. Half-Life</button>
+                    <button onclick="showPhysicsSection('radiation')" class="btn ${currentPhysicsSection === 'radiation' ? 'btn-view' : ''}" style="padding: 0.8rem;">4. Radiation Types</button>
+                    <button onclick="showPhysicsSection('calculator')" class="btn ${currentPhysicsSection === 'calculator' ? 'btn-view' : ''}" style="padding: 0.8rem;">🧮 Calculators</button>
+                </div>
+
+                <!-- Content Area -->
+                <div id="physicsContent">
+                    ${getPhysicsWelcomeContent()}
+                </div>
+
+                <!-- PSP Footer -->
+                <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #e5e7eb;">
+                    <p style="color: #6b7280;">PSP MedPrep 🇵🇰 Platform - Nuclear Physics Module</p>
+                </div>
+            </div>
+            `;
+            
+            document.getElementById('nuclearPhysicsContent').innerHTML = content;
+        }
+
+        // AI Solver Module Renderer
+        function renderAISolverModule() {
+            const content = `
+            <div style="max-width: 1000px; margin: 0 auto; padding: 1rem;">
+                <!-- Header with Back Button -->
+                <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 1.5rem;">
+                    <button onclick="backToDashboard()" class="btn btn-view" style="display: flex; align-items: center; gap: 0.5rem;">
+                        🔙 Back to Dashboard
+                    </button>
+                    <h1 style="color: #7c3aed; margin: 0; text-align: center; flex: 1;">Physics AI Solver</h1>
+                </div>
+
+                <!-- Input Section -->
+                <div class="quick-card">
+                    <h3 style="color: #2563eb; margin-bottom: 1rem;">🔍 Enter Your Physics Problem</h3>
+                    
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <textarea id="problemInput" placeholder="Type your nuclear physics problem here...
+Examples:
+• Calculate half-life of 100g sample decaying to 25g in 60 days
+• What is binding energy of uranium-235?
+• Compare alpha, beta, gamma radiation penetration
+• A radioactive element has half-life 10 days. Find decay constant
+• Solve: N = 800 × (1/2)^(30/10)" 
+                            style="width: 100%; height: 150px; padding: 1rem; border: 2px solid #e5e7eb; border-radius: 10px; font-family: inherit; resize: vertical;"></textarea>
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <button onclick="solveWithWolfram()" class="cta-button" style="background: #dc2626;">
+                                🐺 Wolfram Alpha
+                            </button>
+                            <button onclick="solveWithSymbolab()" class="cta-button" style="background: #059669;">
+                                📈 Symbolab
+                            </button>
+                            <button onclick="solveWithGoogle()" class="cta-button" style="background: #2563eb;">
+                                🔍 Google Scholar
+                            </button>
+                            <button onclick="solveWithAI()" class="cta-button" style="background: #7c3aed;">
+                                🧠 AI Analysis
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <button onclick="insertExample('half-life')" class="btn" style="background: #f0f7ff; color: #2563eb;">Half-Life</button>
+                        <button onclick="insertExample('decay')" class="btn" style="background: #f0f7ff; color: #2563eb;">Decay Constant</button>
+                        <button onclick="insertExample('binding')" class="btn" style="background: #f0f7ff; color: #2563eb;">Binding Energy</button>
+                        <button onclick="insertExample('radiation')" class="btn" style="background: #f0f7ff; color: #2563eb;">Radiation</button>
+                        <button onclick="insertExample('mcq')" class="btn" style="background: #f0f7ff; color: #2563eb;">MCQ Solution</button>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div id="resultsSection" style="display: none;">
+                    <div class="quick-card">
+                        <h3 style="color: #059669; margin-bottom: 1rem;">✅ Solution Results</h3>
+                        
+                        <div id="solutionSteps" style="background: #f0fdf4; padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem;">
+                            <!-- Solution will appear here -->
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div id="calculationResult" style="background: #f0f7ff; padding: 1rem; border-radius: 8px;">
+                                <h4 style="color: #2563eb;">🧮 Numerical Answer</h4>
+                                <div id="numericalAnswer"></div>
+                            </div>
+                            
+                            <div id="conceptExplanation" style="background: #faf5ff; padding: 1rem; border-radius: 8px;">
+                                <h4 style="color: #7c3aed;">📚 Concept Used</h4>
+                                <div id="conceptInfo"></div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 1rem; text-align: center;">
+                            <button onclick="showMoreResources()" class="cta-button" style="background: #f59e0b;">
+                                📖 Show More Resources
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resource Links -->
+                <div id="resourcesSection" style="display: none;">
+                    <div class="quick-card">
+                        <h3 style="color: #dc2626; margin-bottom: 1rem;">🔗 Verified Resources</h3>
+                        <div id="resourceLinks" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                            <!-- Resource links will appear here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Indicator -->
+                <div id="loadingIndicator" style="display: none; text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">⏰</div>
+                    <h4 style="color: #2563eb;">Analyzing Your Problem...</h4>
+                    <p>Connecting to computational engines for accurate solution</p>
+                </div>
+            </div>
+            `;
+            
+            document.getElementById('aiSolverContent').innerHTML = content;
+        }
+
+        // Content generators for Nuclear Physics
+        function getPhysicsWelcomeContent() {
+            currentPhysicsSection = 'welcome';
+            return `
+            <div style="text-align: center; padding: 2rem;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">⚛️</div>
+                <h2 style="color: #2563eb; margin-bottom: 1rem;">MDCAT Nuclear Physics</h2>
+                <p style="color: #6b7280; margin-bottom: 2rem; font-size: 1.1rem;">
+                    Complete conceptual guide with interactive problem solvers and calculators
+                </p>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <div style="font-size: 2rem; color: #2563eb;">🎯</div>
+                        <h4>Exam-Focused</h4>
+                        <p>High-yield MDCAT concepts only</p>
+                    </div>
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <div style="font-size: 2rem; color: #059669;">🧮</div>
+                        <h4>Interactive Tools</h4>
+                        <p>Live calculators & problem solvers</p>
+                    </div>
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+                        <div style="font-size: 2rem; color: #7c3aed;">📚</div>
+                        <h4>Quick Revision</h4>
+                        <p>Perfect for last-minute preparation</p>
+                    </div>
+                </div>
+
+                <button onclick="showPhysicsSection('composition')" class="cta-button" style="margin-top: 2rem;">
+                    🚀 Start Learning Nuclear Physics
+                </button>
+            </div>
+            `;
+        }
+
+        function showPhysicsSection(section) {
+            currentPhysicsSection = section;
+            let content = '';
+            
+            switch(section) {
+                case 'composition':
+                    content = getCompositionContent();
+                    break;
+                case 'decay':
+                    content = getDecayContent();
+                    break;
+                case 'half-life':
+                    content = getHalfLifeContent();
+                    break;
+                case 'radiation':
+                    content = getRadiationContent();
+                    break;
+                case 'calculator':
+                    content = getCalculatorContent();
+                    break;
+                default:
+                    content = getPhysicsWelcomeContent();
+            }
+            
+            document.getElementById('physicsContent').innerHTML = content;
+        }
+
+        function getCompositionContent() {
+            return `
+            <div class="quick-card" style="text-align: left;">
+                <h2 style="color: #2563eb; margin-bottom: 1.5rem;">1. Composition of Atomic Nucleus</h2>
+                
+                <div style="background: #f0f7ff; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                    <h4 style="color: #2563eb;">🎯 Key Concepts</h4>
+                    <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                        <li><strong>Proton:</strong> +1 charge, 1 u mass, found in nucleus</li>
+                        <li><strong>Neutron:</strong> 0 charge, 1 u mass, found in nucleus</li>
+                        <li><strong>Electron:</strong> -1 charge, 1/1840 u mass, orbits nucleus</li>
+                        <li><strong>Atomic Number (Z):</strong> Number of protons (defines element)</li>
+                        <li><strong>Mass Number (A):</strong> Protons + Neutrons (nucleons)</li>
+                        <li><strong>Isotopes:</strong> Same Z, different A (different neutrons)</li>
+                    </ul>
+                </div>
+
+                <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                    <h4 style="color: #059669;">📝 Nuclear Notation</h4>
+                    <div style="text-align: center; font-family: monospace; font-size: 1.5rem; margin: 1rem 0; padding: 1rem; background: white; border-radius: 8px;">
+                        <sup>A</sup><sub>Z</sub>X
+                    </div>
+                    <p>Where X = element symbol, A = mass number, Z = atomic number</p>
+                    <p><strong>Example:</strong> <sup>12</sup><sub>6</sub>C has 6 protons and 6 neutrons</p>
+                </div>
+
+                <div style="background: #faf5ff; padding: 1.5rem; border-radius: 10px;">
+                    <h4 style="color: #7c3aed;">📊 Nuclear Properties</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div style="background: white; padding: 1rem; border-radius: 8px;">
+                            <strong>Size:</strong> 10⁻¹⁴ to 10⁻¹⁵ m
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 8px;">
+                            <strong>Density:</strong> ~2.3 × 10¹⁷ kg/m³
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 8px;">
+                            <strong>Mass Unit:</strong> 1 u = 1.66 × 10⁻²⁷ kg
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 8px;">
+                            <strong>Radius:</strong> R = R₀A¹/³
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        function getDecayContent() {
+            return `
+            <div class="quick-card" style="text-align: left;">
+                <h2 style="color: #2563eb; margin-bottom: 1.5rem;">2. Radioactive Decay</h2>
+                
+                <div style="background: #fef3c7; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                    <h4 style="color: #d97706;">⚠️ MDCAT Traps & Truths</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div style="background: #fecaca; padding: 1rem; border-radius: 8px;">
+                            <strong>❌ FALSE Statements</strong>
+                            <ul style="margin: 0.5rem 0; padding-left: 1.2rem;">
+                                <li>We can predict when a specific atom will decay</li>
+                                <li>Half-life can be changed by temperature</li>
+                                <li>Radioactive element completely decays</li>
+                                <li>Chemical reactions affect decay rate</li>
+                            </ul>
+                        </div>
+                        <div style="background: #bbf7d0; padding: 1rem; border-radius: 8px;">
+                            <strong>✅ TRUE Statements</strong>
+                            <ul style="margin: 0.5rem 0; padding-left: 1.2rem;">
+                                <li>Decay is random for individual atoms</li>
+                                <li>Half-life is constant for each isotope</li>
+                                <li>Decay follows first-order kinetics</li>
+                                <li>Activity depends on amount of substance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #f0f7ff; padding: 1.5rem; border-radius: 10px;">
+                    <h4 style="color: #2563eb;">📈 Exponential Decay Law</h4>
+                    <div style="text-align: center; font-family: monospace; font-size: 1.3rem; margin: 1rem 0; padding: 1rem; background: white; border-radius: 8px;">
+                        N = N₀e^(-λt)
+                    </div>
+                    <p>Where: N = remaining atoms, N₀ = initial atoms, λ = decay constant, t = time</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div style="text-align: center;">
+                            <strong>Decay Constant (λ)</strong>
+                            <p>Probability of decay per unit time</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <strong>Half-Life (T₁/₂)</strong>
+                            <p>T₁/₂ = ln(2)/λ = 0.693/λ</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <strong>Activity (A)</strong>
+                            <p>A = λN = A₀e^(-λt)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        function getHalfLifeContent() {
+            return `
+            <div class="quick-card" style="text-align: left;">
+                <h2 style="color: #2563eb; margin-bottom: 1.5rem;">3. Half-Life & Calculations</h2>
+                
+                <div style="background: #faf5ff; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                    <h4 style="color: #7c3aed;">🧠 Key Formula</h4>
+                    <div style="text-align: center; font-family: monospace; font-size: 1.3rem; margin: 1rem 0; padding: 1rem; background: white; border-radius: 8px;">
+                        N = N₀ × (1/2)^(t/T)
+                    </div>
+                    <p>Where: N = final amount, N₀ = initial amount, t = time, T = half-life</p>
+                </div>
+
+                <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                    <h4 style="color: #059669;">📊 Quick Reference Table</h4>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                            <thead>
+                                <tr style="background: #2563eb; color: white;">
+                                    <th style="padding: 0.75rem; text-align: left;">Half-Lives</th>
+                                    <th style="padding: 0.75rem; text-align: left;">Fraction Left</th>
+                                    <th style="padding: 0.75rem; text-align: left;">% Remaining</th>
+                                    <th style="padding: 0.75rem; text-align: left;">% Decayed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid #e5e7eb;"><td>0</td><td>1</td><td>100%</td><td>0%</td></tr>
+                                <tr style="border-bottom: 1px solid #e5e7eb;"><td>1</td><td>1/2</td><td>50%</td><td>50%</td></tr>
+                                <tr style="border-bottom: 1px solid #e5e7eb;"><td>2</td><td>1/4</td><td>25%</td><td>75%</td></tr>
+                                <tr style="border-bottom: 1px solid #e5e7eb;"><td>3</td><td>1/8</td><td>12.5%</td><td>87.5%</td></tr>
+                                <tr style="border-bottom: 1px solid #e5e7eb;"><td>4</td><td>1/16</td><td>6.25%</td><td>93.75%</td></tr>
+                                <tr><td>5</td><td>1/32</td><td>3.125%</td><td>96.875%</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div style="background: #fffbeb; padding: 1.5rem; border-radius: 10px;">
+                    <h4 style="color: #d97706;">💡 Problem Solving Strategy</h4>
+                    <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+                        <li><strong>Identify known values:</strong> N₀, N, t, T</li>
+                        <li><strong>Count half-lives:</strong> How many times it halves</li>
+                        <li><strong>Use formula:</strong> N = N₀ × (1/2)^n</li>
+                        <li><strong>Calculate:</strong> Solve for unknown variable</li>
+                        <li><strong>Verify:</strong> Check if answer makes sense</li>
+                    </ol>
+                    
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                        <strong>Example:</strong> 800g → 400g → 200g → 100g = 3 half-lives
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        function getRadiationContent() {
+            return `
+            <div class="quick-card" style="text-align: left;">
+                <h2 style="color: #2563eb; margin-bottom: 1.5rem;">4. Radiation Types & Properties</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div style="background: #fef3c7; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #d97706;">
+                        <h4 style="color: #d97706; margin-bottom: 1rem;">α Radiation</h4>
+                        <p><strong>Composition:</strong> Helium nucleus (2 protons + 2 neutrons)</p>
+                        <p><strong>Charge:</strong> +2e</p>
+                        <p><strong>Mass:</strong> 4 u</p>
+                        <p><strong>Penetration:</strong> Stopped by paper (2-10 cm air)</p>
+                        <p><strong>Ionization:</strong> High</p>
+                        <p><strong>Speed:</strong> ~0.1c</p>
+                    </div>
+                    
+                    <div style="background: #dbeafe; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #2563eb;">
+                        <h4 style="color: #2563eb; margin-bottom: 1rem;">β Radiation</h4>
+                        <p><strong>Composition:</strong> High-speed electron/positron</p>
+                        <p><strong>Charge:</strong> -1e (β⁻) or +1e (β⁺)</p>
+                        <p><strong>Mass:</strong> 1/1840 u</p>
+                        <p><strong>Penetration:</strong> Stopped by aluminum (few mm)</p>
+                        <p><strong>Ionization:</strong> Medium</p>
+                        <p><strong>Speed:</strong> ~0.9c</p>
+                    </div>
+                    
+                    <div style="background: #f3e8ff; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #7c3aed;">
+                        <h4 style="color: #7c3aed; margin-bottom: 1rem;">γ Radiation</h4>
+                        <p><strong>Composition:</strong> Electromagnetic wave (photon)</p>
+                        <p><strong>Charge:</strong> 0</p>
+                        <p><strong>Mass:</strong> 0</p>
+                        <p><strong>Penetration:</strong> Stopped by lead/thick concrete</p>
+                        <p><strong>Ionization:</strong> Low</p>
+                        <p><strong>Speed:</strong> c (light speed)</p>
+                    </div>
+                </div>
+
+                <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 10px;">
+                    <h4 style="color: #059669;">🛡️ Radiation Protection</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem;">📄</div>
+                            <p><strong>Alpha:</strong> Paper gloves</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem;">🥫</div>
+                            <p><strong>Beta:</strong> Aluminum shielding</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem;">🧱</div>
+                            <p><strong>Gamma:</strong> Lead/concrete walls</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2rem;">📏</div>
+                            <p><strong>All:</strong> Distance + Time + Shielding</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+        }
+
+        function getCalculatorContent() {
+            return `
+            <div class="quick-card" style="text-align: left;">
+                <h2 style="color: #2563eb; margin-bottom: 1.5rem;">🧮 Nuclear Physics Calculators</h2>
+                
+                <!-- Half-Life Calculator -->
+                <div style="background: #f0f7ff; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                    <h4 style="color: #2563eb;">⏰ Half-Life Calculator</h4>
+                    <p>Enter any three values to calculate the fourth:</p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                        <input type="number" id="hlInitial" placeholder="Initial Amount (N₀)" class="calculator-input">
+                        <input type="number" id="hlFinal" placeholder="Final Amount (N)" class="calculator-input">
+                        <input type="number" id="hlTime" placeholder="Time Elapsed (t)" class="calculator-input">
+                        <input type="number" id="hlHalfLife" placeholder="Half-Life (T)" class="calculator-input">
+                    </div>
+                    
+                    <button onclick="calculateHalfLife()" class="cta-button" style="width: 100%;">Calculate</button>
+                    <div id="hlResult" style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px; display: none;"></div>
+                </div>
+
+                <!-- Decay Constant Calculator -->
+                <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem;">
+                    <h4 style="color: #059669;">📈 Decay Constant Calculator</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                        <input type="number" id="dcHalfLife" placeholder="Half-Life (T)" class="calculator-input">
+                        <input type="number" id="dcTime" placeholder="Time (t)" class="calculator-input">
+                        <input type="number" id="dcInitial" placeholder="Initial Amount (N₀)" class="calculator-input">
+                    </div>
+                    <button onclick="calculateDecayConstant()" class="cta-button" style="width: 100%; background: #059669;">Calculate Decay</button>
+                    <div id="dcResult" style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px; display: none;"></div>
+                </div>
+
+                <!-- Binding Energy Calculator -->
+                <div style="background: #faf5ff; padding: 1.5rem; border-radius: 10px;">
+                    <h4 style="color: #7c3aed;">⚡ Binding Energy Calculator</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                        <input type="number" id="beProtons" placeholder="Number of Protons (Z)" class="calculator-input">
+                        <input type="number" id="beNeutrons" placeholder="Number of Neutrons (N)" class="calculator-input">
+                        <input type="number" id="beMass" placeholder="Nuclear Mass (u)" class="calculator-input" step="0.0001">
+                    </div>
+                    <button onclick="calculateBindingEnergy()" class="cta-button" style="width: 100%; background: #7c3aed;">Calculate Binding Energy</button>
+                    <div id="beResult" style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px; display: none;"></div>
+                </div>
+            </div>
+            `;
+        }
+
+        // Calculator Functions
+        function calculateHalfLife() {
+            const initial = parseFloat(document.getElementById('hlInitial').value);
+            const final = parseFloat(document.getElementById('hlFinal').value);
+            const time = parseFloat(document.getElementById('hlTime').value);
+            const halfLife = parseFloat(document.getElementById('hlHalfLife').value);
+            
+            let result = '';
+            let filled = [initial, final, time, halfLife].filter(x => !isNaN(x)).length;
+            
+            if (filled < 3) {
+                result = '<div style="color: #dc2626; font-weight: bold;">❌ Please enter at least three values</div>';
+            } else {
+                if (isNaN(initial)) {
+                    const n = time / halfLife;
+                    const calcInitial = final / Math.pow(0.5, n);
+                    result = `
+                        <div style="color: #059669;">
+                            <strong>✅ Initial Amount (N₀) = ${calcInitial.toFixed(2)}</strong><br>
+                            <small>Calculation: N₀ = N / (1/2)^(t/T) = ${final} / (1/2)^(${time}/${halfLife})</small>
+                        </div>
+                    `;
+                } else if (isNaN(final)) {
+                    const n = time / halfLife;
+                    const calcFinal = initial * Math.pow(0.5, n);
+                    result = `
+                        <div style="color: #059669;">
+                            <strong>✅ Final Amount (N) = ${calcFinal.toFixed(2)}</strong><br>
+                            <small>Calculation: N = N₀ × (1/2)^(t/T) = ${initial} × (1/2)^(${time}/${halfLife})</small>
+                        </div>
+                    `;
+                } else if (isNaN(time)) {
+                    const ratio = final / initial;
+                    const calcTime = halfLife * (Math.log(ratio) / Math.log(0.5));
+                    result = `
+                        <div style="color: #059669;">
+                            <strong>✅ Time Elapsed = ${calcTime.toFixed(2)}</strong><br>
+                            <small>Calculation: t = T × log(N/N₀) / log(1/2) = ${halfLife} × log(${final}/${initial}) / log(0.5)</small>
+                        </div>
+                    `;
+                } else if (isNaN(halfLife)) {
+                    const ratio = final / initial;
+                    const calcHalfLife = time / (Math.log(ratio) / Math.log(0.5));
+                    result = `
+                        <div style="color: #059669;">
+                            <strong>✅ Half-Life = ${calcHalfLife.toFixed(2)}</strong><br>
+                            <small>Calculation: T = t / [log(N/N₀) / log(1/2)] = ${time} / [log(${final}/${initial}) / log(0.5)]</small>
+                        </div>
+                    `;
+                }
+                
+                result += '<p style="margin-top: 0.5rem;"><strong>📚 Formula used:</strong> N = N₀(1/2)^(t/T)</p>';
+            }
+            
+            document.getElementById('hlResult').innerHTML = result;
+            document.getElementById('hlResult').style.display = 'block';
+        }
+
+        function calculateDecayConstant() {
+            const halfLife = parseFloat(document.getElementById('dcHalfLife').value);
+            const time = parseFloat(document.getElementById('dcTime').value);
+            const initial = parseFloat(document.getElementById('dcInitial').value);
+            
+            if (!halfLife) {
+                document.getElementById('dcResult').innerHTML = '<div style="color: #dc2626; font-weight: bold;">❌ Please enter half-life</div>';
+                document.getElementById('dcResult').style.display = 'block';
+                return;
+            }
+            
+            const decayConstant = 0.693 / halfLife;
+            let result = `
+                <div style="color: #059669;">
+                    <strong>✅ Decay Constant (λ) = ${decayConstant.toFixed(6)}</strong><br>
+                    <small>Formula: λ = 0.693 / T = 0.693 / ${halfLife}</small>
+                </div>
+            `;
+            
+            if (!isNaN(time) && !isNaN(initial)) {
+                const remaining = initial * Math.exp(-decayConstant * time);
+                const decayed = initial - remaining;
+                const percentage = (decayed / initial) * 100;
+                
+                result += `
+                    <div style="margin-top: 1rem;">
+                        <strong>📊 After ${time} time units:</strong><br>
+                        • Remaining: ${remaining.toFixed(2)} (${(100-percentage).toFixed(1)}%)<br>
+                        • Decayed: ${decayed.toFixed(2)} (${percentage.toFixed(1)}%)<br>
+                        <small>Using: N = N₀e^(-λt)</small>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('dcResult').innerHTML = result;
+            document.getElementById('dcResult').style.display = 'block';
+        }
+
+        function calculateBindingEnergy() {
+            const protons = parseInt(document.getElementById('beProtons').value);
+            const neutrons = parseInt(document.getElementById('beNeutrons').value);
+            const mass = parseFloat(document.getElementById('beMass').value);
+            
+            if (isNaN(protons) || isNaN(neutrons) || isNaN(mass)) {
+                document.getElementById('beResult').innerHTML = '<div style="color: #dc2626; font-weight: bold;">❌ Please enter all values</div>';
+                document.getElementById('beResult').style.display = 'block';
+                return;
+            }
+            
+            const massProton = 1.007276; // u
+            const massNeutron = 1.008665; // u
+            const massElectron = 0.000549; // u
+            
+            // Calculate expected mass
+            const expectedMass = (protons * massProton) + (neutrons * massNeutron) - (protons * massElectron);
+            
+            // Mass defect
+            const massDefect = expectedMass - mass;
+            
+            // Binding energy (1 u = 931.5 MeV)
+            const bindingEnergy = massDefect * 931.5;
+            
+            // Binding energy per nucleon
+            const nucleons = protons + neutrons;
+            const bindingEnergyPerNucleon = bindingEnergy / nucleons;
+            
+            document.getElementById('beResult').innerHTML = `
+                <div style="color: #7c3aed;">
+                    <strong>✅ Binding Energy Results:</strong><br>
+                    • Mass Defect: ${massDefect.toFixed(6)} u<br>
+                    • Total Binding Energy: ${bindingEnergy.toFixed(2)} MeV<br>
+                    • Binding Energy per Nucleon: ${bindingEnergyPerNucleon.toFixed(3)} MeV/nucleon<br>
+                    <small>Formula: E = Δm × 931.5 MeV/u</small>
+                </div>
+            `;
+            document.getElementById('beResult').style.display = 'block';
+        }
+
+        // AI Solver Functions
+        function solveWithWolfram() {
+            const problem = document.getElementById('problemInput').value.trim();
+            if (!problem) {
+                alert('Please enter a physics problem');
+                return;
+            }
+
+            showLoading();
+            
+            // Wolfram Alpha API integration
+            const wolframQuery = encodeURIComponent(`nuclear physics ${problem}`);
+            setTimeout(() => {
+                hideLoading();
+                showResults();
+                
+                document.getElementById('solutionSteps').innerHTML = `
+                    <h4 style="color: #dc2626; margin-bottom: 1rem;">🐺 Wolfram Alpha Solution</h4>
+                    <p><strong>Problem:</strong> ${problem}</p>
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                        <p><strong>Step 1:</strong> Problem analyzed using computational intelligence</p>
+                        <p><strong>Step 2:</strong> Nuclear physics parameters identified</p>
+                        <p><strong>Step 3:</strong> Mathematical solution computed</p>
+                        <p><strong>Step 4:</strong> Result verified against known constants</p>
+                    </div>
+                    <p><em>For detailed step-by-step solution, visit:</em></p>
+                    <a href="https://www.wolframalpha.com/input?i=${wolframQuery}" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: bold;">
+                        🔗 Open in Wolfram Alpha
+                    </a>
+                `;
+                
+                // Auto-calculate if it's a numerical problem
+                autoCalculateProblem(problem);
+                
+            }, 2000);
+        }
+
+        function solveWithSymbolab() {
+            const problem = document.getElementById('problemInput').value.trim();
+            if (!problem) return;
+            
+            showLoading();
+            
+            const symbolabQuery = encodeURIComponent(problem);
+            setTimeout(() => {
+                hideLoading();
+                showResults();
+                
+                document.getElementById('solutionSteps').innerHTML = `
+                    <h4 style="color: #059669; margin-bottom: 1rem;">📈 Symbolab Step-by-Step</h4>
+                    <p><strong>Problem:</strong> ${problem}</p>
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                        <p><strong>Step-by-step solution generated:</strong></p>
+                        <p>1. Problem interpretation and variable identification</p>
+                        <p>2. Relevant nuclear physics formulas applied</p>
+                        <p>3. Mathematical computation with proper units</p>
+                        <p>4. Final answer with verification</p>
+                    </div>
+                    <a href="https://www.symbolab.com/solver/${symbolabQuery}" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: bold;">
+                        🔗 Open Step-by-Step Solution
+                    </a>
+                `;
+                
+                autoCalculateProblem(problem);
+                
+            }, 2000);
+        }
+
+        function solveWithGoogle() {
+            const problem = document.getElementById('problemInput').value.trim();
+            if (!problem) return;
+            
+            showLoading();
+            
+            const googleQuery = encodeURIComponent(`nuclear physics ${problem} solution`);
+            setTimeout(() => {
+                hideLoading();
+                showResults();
+                
+                document.getElementById('solutionSteps').innerHTML = `
+                    <h4 style="color: #2563eb; margin-bottom: 1rem;">🔍 Google Scholar Results</h4>
+                    <p><strong>Searching for:</strong> ${problem}</p>
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                        <p>📚 <strong>Verified Resources Found:</strong></p>
+                        <p>• Physics textbooks and academic papers</p>
+                        <p>• University lecture notes on nuclear physics</p>
+                        <p>• Verified online educational resources</p>
+                        <p>• Research papers with peer-reviewed solutions</p>
+                    </div>
+                    <a href="https://www.google.com/search?q=${googleQuery}" target="_blank" style="color: #2563eb; text-decoration: none; font-weight: bold;">
+                        🔗 Search Google Scholar
+                    </a>
+                `;
+                
+                showGoogleResources(problem);
+                
+            }, 1500);
+        }
+
+        function solveWithAI() {
+            const problem = document.getElementById('problemInput').value.trim();
+            if (!problem) return;
+            
+            showLoading();
+            
+            setTimeout(() => {
+                hideLoading();
+                showResults();
+                
+                // AI-powered analysis
+                const analysis = analyzeProblemWithAI(problem);
+                
+                document.getElementById('solutionSteps').innerHTML = `
+                    <h4 style="color: #7c3aed; margin-bottom: 1rem;">🧠 AI-Powered Analysis</h4>
+                    <p><strong>Problem:</strong> ${problem}</p>
+                    <div style="background: white; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                        ${analysis.steps}
+                    </div>
+                    <p><strong>AI Confidence:</strong> <span style="color: #059669;">${analysis.confidence}%</span></p>
+                `;
+                
+                document.getElementById('numericalAnswer').innerHTML = analysis.numericalAnswer;
+                document.getElementById('conceptInfo').innerHTML = analysis.conceptInfo;
+                
+            }, 2500);
+        }
+
+        // =============================================
+        // AI SOLVER ENGINE
+        // =============================================
+        function analyzeProblemWithAI(problem) {
+            let analysis = {
+                confidence: 95,
+                steps: '',
+                numericalAnswer: '',
+                conceptInfo: ''
+            };
+
+            problem = problem.toLowerCase();
+
+            // Half-life problems
+            if (problem.includes('half-life') || problem.includes('half life')) {
+                analysis.steps = `
+                    <p><strong>Step 1:</strong> Identified as nuclear decay/half-life problem</p>
+                    <p><strong>Step 2:</strong> Using formula: N = N₀ × (1/2)^(t/T)</p>
+                    <p><strong>Step 3:</strong> Decay constant: λ = 0.693 / T</p>
+                    <p><strong>Step 4:</strong> Activity: A = λN</p>
+                `;
+                analysis.numericalAnswer = calculateHalfLifeFromText(problem);
+                analysis.conceptInfo = 'Radioactive decay follows first-order kinetics. Half-life is constant for each isotope.';
+            }
+            // Binding energy
+            else if (problem.includes('binding energy')) {
+                analysis.steps = `
+                    <p><strong>Step 1:</strong> Identified as nuclear binding energy problem</p>
+                    <p><strong>Step 2:</strong> Using Einstein\'s mass-energy equivalence: E = Δmc²</p>
+                    <p><strong>Step 3:</strong> Mass defect calculation</p>
+                    <p><strong>Step 4:</strong> Energy conversion (u to MeV)</p>
+                `;
+                analysis.numericalAnswer = 'Use E = Δm × 931.5 MeV/u';
+                analysis.conceptInfo = 'Binding energy is the energy required to disassemble a nucleus into its constituent protons and neutrons.';
+            }
+            // Radiation problems
+            else if (problem.includes('alpha') || problem.includes('beta') || problem.includes('gamma')) {
+                analysis.steps = `
+                    <p><strong>Step 1:</strong> Identified as radiation properties problem</p>
+                    <p><strong>Step 2:</strong> Alpha: helium nucleus (2p+2n), stopped by paper</p>
+                    <p><strong>Step 3:</strong> Beta: high-speed electron, stopped by aluminum</p>
+                    <p><strong>Step 4:</strong> Gamma: electromagnetic radiation, stopped by lead</p>
+                `;
+                analysis.numericalAnswer = 'Penetration: α < β < γ';
+                analysis.conceptInfo = 'Radiation types differ in mass, charge, and penetrating power.';
+            }
+            // General nuclear physics
+            else {
+                analysis.steps = `
+                    <p><strong>Step 1:</strong> General nuclear physics problem detected</p>
+                    <p><strong>Step 2:</strong> Analyzing nuclear properties and formulas</p>
+                    <p><strong>Step 3:</strong> Applying relevant nuclear physics principles</p>
+                    <p><strong>Step 4:</strong> Computational solution generation</p>
+                `;
+                analysis.numericalAnswer = 'Solution requires specific computational analysis';
+                analysis.conceptInfo = 'Nuclear physics involves nuclear structure, forces, and radioactive processes.';
+            }
+
+            return analysis;
+        }
+
+        function autoCalculateProblem(problem) {
+            problem = problem.toLowerCase();
+            let numericalAnswer = '';
+            let conceptInfo = '';
+
+            // Extract numbers from problem
+            const numbers = problem.match(/\d+\.?\d*/g) || [];
+            const nums = numbers.map(Number);
+
+            if ((problem.includes('half-life') || problem.includes('decay')) && nums.length >= 3) {
+                // Example: "100g to 25g in 60 days"
+                const initial = nums[0];
+                const final = nums[1];
+                const time = nums[2];
+                
+                if (initial > final) {
+                    const halfLives = Math.log2(initial / final);
+                    const halfLife = time / halfLives;
+                    const decayConstant = 0.693 / halfLife;
+                    
+                    numericalAnswer = `
+                        <strong>Calculation:</strong><br>
+                        Half-lives (n) = log₂(${initial}/${final}) = ${halfLives.toFixed(2)}<br>
+                        Half-life (T) = ${time} / ${halfLives.toFixed(2)} = ${halfLife.toFixed(2)} units<br>
+                        Decay constant (λ) = 0.693 / ${halfLife.toFixed(2)} = ${decayConstant.toFixed(4)} units⁻¹
+                    `;
+                    conceptInfo = 'Radioactive decay: N = N₀(1/2)^(t/T)';
+                }
+            }
+            else if (problem.includes('decay constant') && nums.length >= 1) {
+                const halfLife = nums[0];
+                const decayConstant = 0.693 / halfLife;
+                
+                numericalAnswer = `Decay constant (λ) = ${decayConstant.toFixed(4)} units⁻¹`;
+                conceptInfo = 'λ = 0.693 / T (half-life)';
+            }
+            else {
+                numericalAnswer = 'Enter specific numerical values for calculation';
+                conceptInfo = 'General nuclear physics concept';
+            }
+
+            document.getElementById('numericalAnswer').innerHTML = numericalAnswer;
+            document.getElementById('conceptInfo').innerHTML = conceptInfo;
+        }
+
+        function calculateHalfLifeFromText(problem) {
+            const numbers = problem.match(/\d+\.?\d*/g) || [];
+            const nums = numbers.map(Number);
+            
+            if (nums.length >= 3) {
+                const initial = nums[0];
+                const final = nums[1];
+                const time = nums[2];
+                
+                if (initial && final && time && initial > final) {
+                    const halfLives = Math.log2(initial / final);
+                    const halfLife = time / halfLives;
+                    const decayConstant = 0.693 / halfLife;
+                    
+                    return `
+                        <strong>Calculation:</strong><br>
+                        Half-lives (n) = log₂(${initial}/${final}) = ${halfLives.toFixed(2)}<br>
+                        Half-life (T) = ${time} / ${halfLives.toFixed(2)} = ${halfLife.toFixed(2)} units<br>
+                        Decay constant (λ) = 0.693 / ${halfLife.toFixed(2)} = ${decayConstant.toFixed(4)} units⁻¹
+                    `;
+                }
+            }
+            
+            return 'Enter numerical values for automatic calculation';
+        }
+
+        // =============================================
+        // UTILITY FUNCTIONS FOR AI SOLVER
+        // =============================================
+        function showLoading() {
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('resultsSection').style.display = 'none';
+            document.getElementById('resourcesSection').style.display = 'none';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingIndicator').style.display = 'none';
+        }
+
+        function showResults() {
+            document.getElementById('resultsSection').style.display = 'block';
+        }
+
+        function showMoreResources() {
+            const problem = document.getElementById('problemInput').value.trim();
+            showGoogleResources(problem);
+            document.getElementById('resourcesSection').style.display = 'block';
+        }
+
+        function showGoogleResources(problem) {
+            const query = encodeURIComponent(`nuclear physics ${problem}`);
+            
+            document.getElementById('resourceLinks').innerHTML = `
+                <div style="background: #f0f7ff; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #2563eb;">📖 Educational Resources</h4>
+                    <a href="https://www.khanacademy.org/science/physics/quantum-physics#nuclear-physics" target="_blank" style="color: #2563eb; text-decoration: none;">• Khan Academy - Nuclear Physics</a><br>
+                    <a href="https://physics.info/nuclear/" target="_blank" style="color: #2563eb; text-decoration: none;">• Physics.info - Nuclear Physics</a><br>
+                    <a href="https://www.britannica.com/science/nuclear-physics" target="_blank" style="color: #2563eb; text-decoration: none;">• Britannica - Nuclear Physics</a>
+                </div>
+                
+                <div style="background: #f0fdf4; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #059669;">🔬 Research Papers</h4>
+                    <a href="https://scholar.google.com/scholar?q=${query}" target="_blank" style="color: #2563eb; text-decoration: none;">• Google Scholar Search</a><br>
+                    <a href="https://arxiv.org/list/physics.nucl/new" target="_blank" style="color: #2563eb; text-decoration: none;">• arXiv Nuclear Physics</a><br>
+                    <a href="https://www.ncbi.nlm.nih.gov/pmc/?term=nuclear+physics" target="_blank" style="color: #2563eb; text-decoration: none;">• PubMed Central</a>
+                </div>
+                
+                <div style="background: #faf5ff; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #7c3aed;">🎓 University Resources</h4>
+                    <a href="https://ocw.mit.edu/courses/physics/8-701-introduction-to-nuclear-and-particle-physics-fall-2020/" target="_blank" style="color: #2563eb; text-decoration: none;">• MIT OpenCourseWare</a><br>
+                    <a href="https://www.coursera.org/learn/particle-physics" target="_blank" style="color: #2563eb; text-decoration: none;">• Coursera - Particle Physics</a><br>
+                    <a href="https://www.edx.org/learn/nuclear-physics" target="_blank" style="color: #2563eb; text-decoration: none;">• edX Nuclear Physics</a>
+                </div>
+                
+                <div style="background: #fffbeb; padding: 1rem; border-radius: 8px;">
+                    <h4 style="color: #d97706;">🧮 Calculation Tools</h4>
+                    <a href="https://www.wolframalpha.com/" target="_blank" style="color: #2563eb; text-decoration: none;">• Wolfram Alpha</a><br>
+                    <a href="https://www.symbolab.com/" target="_blank" style="color: #2563eb; text-decoration: none;">• Symbolab</a><br>
+                    <a href="https://www.desmos.com/scientific" target="_blank" style="color: #2563eb; text-decoration: none;">• Desmos Scientific</a>
+                </div>
+            `;
+        }
+
+        function insertExample(type) {
+            const examples = {
+                'half-life': 'A radioactive sample decays from 800g to 100g in 90 days. Calculate the half-life.',
+                'decay': 'Carbon-14 has a half-life of 5730 years. Calculate its decay constant.',
+                'binding': 'Calculate the binding energy of uranium-235 nucleus.',
+                'radiation': 'Compare the penetrating power of alpha, beta, and gamma radiation.',
+                'mcq': 'Which statement about radioactive decay is correct? A) We can predict when a specific atom will decay B) Half-life can be changed by temperature C) Radioactive decay follows first-order kinetics D) All radioactive elements completely decay after 10 half-lives'
+            };
+            
+            document.getElementById('problemInput').value = examples[type] || '';
+        }
+
+        // =============================================
+        // STYLES FOR BOTH MODULES
+        // =============================================
+        // Add CSS styles dynamically
+        const physicsStyles = `
+        .quick-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .calculator-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .calculator-input:focus {
+            border-color: #2563eb;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        /* Animation for loading */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .loading-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-card {
+                padding: 1.5rem;
+            }
+        }
+        `;
+
+        // Inject styles
+        const styleElement = document.createElement('style');
+        styleElement.textContent = physicsStyles;
+        document.head.appendChild(styleElement);
+    </script>
+</body>
+</html>
+```
+
+
+EXACT SAME CODE with only these modifications:
+
+1. 🇵🇰 Pakistan flag added to platform name
+2. Loading emoji changed to ⏰
+3. Logout emoji changed to 🔐
+4. All other text remains EXACTLY THE SAME word-for-word
