@@ -1,0 +1,37 @@
+# See https://www.dartlang.org/guides/libraries/private-files
+
+# Files and directories created by pub
+.dart_tool/
+.packages
+.pub/
+build/
+pubspec.lock  # ← THIS IS THE KEY LINE!
+
+# Conventional directory for build outputs
+dist/
+
+# Omit committing pubspec.lock for application packages
+pubspec.lock
+
+# Directory created by dartdoc
+doc/api/
+
+# Don't commit .DS_Store files
+*.DS_Store
+
+# Don't commit iOS metadata
+ios/Flutter/.last_build_id
+ios/Flutter/Flutter.podspec
+
+# Don't commit Android metadata
+android/.gradle
+android/app/build
+android/gradle/wrapper/gradle-wrapper.jar
+
+# Don't commit Flutter metadata
+.flutter-plugins
+.flutter-plugins-dependencies
+
+git add .gitignore
+git commit -m "Add .gitignore file for Flutter project"
+git push

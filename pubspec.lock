@@ -1,3 +1,0 @@
-git add pubspec.lock
-git commit -m "Lock dependencies for Codemagic build"
-git push
