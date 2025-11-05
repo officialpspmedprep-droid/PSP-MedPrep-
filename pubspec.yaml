@@ -4,7 +4,7 @@ version: 1.0.0+1
 publish_to: 'none' # Do not publish to pub.dev
 
 environment:
-  sdk: ">=2.18.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
   flutter: ">=3.24.0"
 
 dependencies:
@@ -15,9 +15,8 @@ dependencies:
   cupertino_icons: ^1.0.5
   provider: ^6.0.5
 
-  # PDF viewing & text extraction
+  # PDF viewing & text extraction (null-safe)
   pdfx: ^2.6.0
-  pdf_text: ^0.4.0 
 
   # HTTP requests
   http: ^1.1.1
