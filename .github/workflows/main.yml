@@ -14,14 +14,23 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v4
 
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.24.0'
         channel: 'stable'
 
-    - name: Show Flutter Version
-      run: flutter --version
+    - name: Cache Flutter Dependencies
+      uses: actions/cache@v3
+      with:
+        path: /opt/hostedtoolcache/flutter
+        key: flutter-cache-${{ runner.os }}-${{ hashFiles('**/pubspec.lock') }}
 
     - name: Get Dependencies
       run: flutter pub get
@@ -30,11 +39,10 @@ jobs:
       run: flutter test
 
     - name: Build Android APK
-      run: flutter build apk --release
+      run: flutter build apk --release --verbose
 
-    - name: Upload APK Artifact
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: psp-medprep-apk
+        name: psp-medprep-app
         path: build/app/outputs/flutter-apk/app-release.apk
-        retention-days: 30
