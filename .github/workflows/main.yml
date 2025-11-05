@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build:
@@ -14,14 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      # 1️⃣ Checkout repo
+      - uses: actions/checkout@v3
 
+      # 2️⃣ Setup Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.0'
 
+      # 3️⃣ Cache Flutter dependencies
       - name: Cache Flutter dependencies
         uses: actions/cache@v3
         with:
@@ -32,14 +31,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-flutter-
 
+      # 4️⃣ Get dependencies
       - name: Get Flutter dependencies
         run: flutter pub get
 
+      # 5️⃣ Build Release APK
       - name: Build Release APK
         run: flutter build apk --release
 
+      # 6️⃣ Upload APK artifact
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-release.apk
+          name: psp_medprep-1.0.0.apk
           path: build/app/outputs/flutter-apk/app-release.apk
